@@ -93,7 +93,15 @@ header {
   background-color: rgb(250, 248, 248);
   border: 1px solid gray;
   animation: slideUpFadeIn 0.4s ease-out;
-
+  img {
+    width: 20px;
+  }
+  .btns {
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px;
+  }
+  .back,
   .close {
     margin-left: 280px;
     width: 28px;
@@ -104,9 +112,15 @@ header {
     font-size: large;
     font-weight: 300;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     &:hover {
       background-color: #3333335a;
     }
+  }
+  .back {
+    margin-left: 0;
   }
   h1 {
     font-size: 24px;
@@ -118,6 +132,33 @@ header {
     font-size: 16px;
     line-height: 20px;
     margin-top: 12px;
+  }
+  .tel {
+    font-size: 16px;
+    line-height: 20px;
+    margin-top: 12px;
+    font-weight: bold;
+  }
+  .number-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 50px;
+    div {
+      padding: 5px;
+      border-radius: 10px;
+      background-color: rgba(202, 202, 202, 0.648);
+      input {
+        width: 20px;
+        height: 25px;
+        padding-left: 9px;
+        border: none;
+        outline: none;
+        display: flex;
+        background-color: transparent;
+      }
+    }
   }
   .ui-input {
     margin-top: 32px;
@@ -138,7 +179,7 @@ header {
       font-weight: 400;
     }
   }
-  .policy {
+  .else-code, .policy {
     font-size: 14px;
     line-height: 18px;
     margin-top: 80px;
@@ -147,6 +188,15 @@ header {
       text-decoration: none;
       color: #37f;
     }
+    span {
+      color: gray;
+      padding-right: 3px;
+    }
+  }
+  .else-code {
+    color: gray;
+    font-size: 16px;
+    line-height: 20px;  
   }
   .btn {
     border: none;

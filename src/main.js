@@ -3,13 +3,12 @@ import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { Header } from "./Components/header";
+import { Header } from "./Components/header.js";
 import { api } from "./services/api.js";
 import { render } from "./libs/utils.js";
 import { CreateProductCardElement } from "./Components/productCard.js";
 
-  Header();
-
+Header();
 
 // Вот эта строка нужна обязательно:
 Swiper.use([Navigation, Pagination]);
@@ -66,4 +65,3 @@ Promise.all([product])
     );
   })
   .catch((error) => console.error(error));
-

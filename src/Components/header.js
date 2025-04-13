@@ -26,31 +26,70 @@ export function Header() {
     back.classList.add("back");
     img.src = "/left.png";
     back.appendChild(img);
-
+    function generateCode() {
+      return Math.floor(10000 + Math.random() * 90000);
+    }
+    let phoneInput;
     function deflatingList() {
       modal.innerHTML = `
       <div class="modal-window">
         <div class="btns">
-          ${back}
           <button class="close" popovertarget="modal">х</button>
         </div>
         <h1>Введите код</h1>
         <p>
           Для подтверждения телефона отправили <br />
-          5-значный код на <span class="tel">+998 99 999-99-99</span>
+          5-значный код на <span class="tel"></span>
         </p>
         <div class="number-container">
-          <div><input type="tel" /></div>
-          <div><input type="tel" /></div>
-          <div><input type="tel" /></div>
-          <div><input type="tel" /></div>
-          <div><input type="tel" /></div>
+          <div><input type="tel" maxlength="1" /></div>
+          <div><input type="tel" maxlength="1" disabled/></div>
+          <div><input type="tel" maxlength="1" disabled/></div>
+          <div><input type="tel" maxlength="1" disabled/></div>
+          <div><input type="tel" maxlength="1" disabled/></div>
         </div>
         <p class="else-code">
           Если код не придёт, можно получить <br />
           новый через <span>150</span>сек
         </p>
       </div>`;
+      let spanTel = document.querySelector(".tel");
+      spanTel.textContent = `+998 ${phoneInput.value}`;
+      const inputs = document.querySelectorAll(".number-container input");
+
+      inputs[0].focus();
+      inputs.forEach((input, index) => {
+        input.addEventListener("input", () => {
+          const next = inputs[index + 1];
+          if (input.value && next) {
+            next.disabled = false;
+            next.focus();
+          }
+        });
+
+        input.addEventListener("keydown", (e) => {
+          if (e.key === "Backspace" && !input.value && index > 0) {
+            const prev = inputs[index - 1];
+            input.disabled = true;
+            prev.focus();
+          }
+        });
+      });
+      const code = generateCode();
+      // alert(code)
+      const btns = modal.querySelector(".btns");
+      btns.insertBefore(back, btns.firstChild);
+
+      back.addEventListener("click", () => {
+        mainList();
+        modal.querySelector(".modal-window").style.display = "block";
+      });
+
+      const close = modal.querySelector(".close");
+      close.addEventListener("click", () => {
+        backdrop.style.display = "none";
+        modal.querySelector(".modal-window").style.display = "none";
+      });
     }
 
     const closeBtn = document.createElement("button");
@@ -66,7 +105,6 @@ export function Header() {
     function mainList() {
       modal.innerHTML = `
       <div id="modal" popover class="modal-window">
-        ${closeBtn}
         <h1>Введите номер телефона</h1>
         <p>Отправим смс с кодом подтверждения</p>
         <form name="reg">
@@ -74,16 +112,24 @@ export function Header() {
             <div class="slot-before">+998</div>
             <input type="tel" id="phoneInput" maxlength="12" placeholder="00 000-00-00" name="telephone" />
           </div>
-          ${btn}
         </form>
         <p class="policy">
           Авторизуясь, вы соглашаетесь c
           <a href="#">политикой <br> обработки персональных данных</a>
         </p>
       </div>`;
+      const modalWindow = modal.querySelector(".modal-window");
+      const form = modal.querySelector("form");
+      phoneInput = document.querySelector("#phoneInput");
 
-      // Перемещаем сюда, чтобы гарантировать доступ к phoneInput
-      const phoneInput = document.querySelector("#phoneInput");
+      modalWindow.insertBefore(closeBtn, modalWindow.firstChild);
+      form.appendChild(btn);
+      form.onsubmit = (e) => {
+        e.preventDefault();
+        let user = {
+          telephone: phoneInput.value,
+        };
+      };
 
       phoneInput.addEventListener("input", function () {
         let digits = this.value.replace(/\D/g, "");
@@ -105,48 +151,29 @@ export function Header() {
 
         this.value = formatted;
       });
+
+      btn.addEventListener("click", () => {
+        deflatingList();
+      });
+
+      closeBtn.addEventListener("click", () => {
+        backdrop.style.display = "none";
+        modal.querySelector(".modal-window").style.display = "none";
+      });
     }
-
-    let isBtnClicked = false;
-
-    back.disabled = true;
-    btn.disabled = true;
 
     const openDiv = document.querySelector(".open-modal");
     const backdrop = document.getElementById("modal-backdrop");
 
     openDiv.addEventListener("click", () => {
-      backdrop.style.display = "block"; // Показать модальное окно
+      mainList();
+      backdrop.style.display = "block";
       modal.querySelector(".modal-window").style.display = "block";
-      btn.disabled = false;
-      mainList();
     });
 
-    closeBtn.addEventListener("click", () => {
-      backdrop.style.display = "none"; // Скрыть модальное окно
-      modal.querySelector(".modal-window").style.display = "none";
-      isBtnClicked = false;
-      back.disabled = true;
-      btn.disabled = true;
-    });
-
-    btn.onclick = () => {
-      deflatingList();
-      isBtnClicked = true;
-      back.disabled = false;
-      btn.disabled = true;
-    };
-
-    back.onclick = () => {
-      mainList();
-      isBtnClicked = false;
-      back.disabled = true;
-      btn.disabled = false;
-    };
-
-    let logo = document.querySelector(".logo");
-    logo.onclick = () => {
+    const logo = document.querySelector(".logo");
+    logo.addEventListener("click", () => {
       window.location.href = "/";
-    };
+    });
   });
 }

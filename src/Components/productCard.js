@@ -1,5 +1,4 @@
 export function CreateProductCardElement(product) {
-  
   const productCard = document.createElement("div");
   productCard.className = "product-card";
 
@@ -7,6 +6,10 @@ export function CreateProductCardElement(product) {
   likeIcon.className = "like";
   likeIcon.src = "/like.svg";
   likeIcon.alt = "Like";
+  likeIcon.addEventListener("click", (e) => {
+    e.stopPropagation();
+    likeIcon.src = "/like-bg.png"
+  })
 
   const productImage = document.createElement("img");
   productImage.className = "poster";

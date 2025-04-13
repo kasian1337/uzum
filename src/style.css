@@ -152,7 +152,9 @@ header {
       input {
         width: 20px;
         height: 25px;
-        padding-left: 9px;
+        padding-left: 6px;
+        font-weight: bold;
+        caret-color: transparent;
         border: none;
         outline: none;
         display: flex;
@@ -196,7 +198,7 @@ header {
   .else-code {
     color: gray;
     font-size: 16px;
-    line-height: 20px;  
+    line-height: 20px;
   }
   .btn {
     border: none;

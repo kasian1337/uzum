@@ -1,7 +1,8 @@
+import { api } from "./../services/api";
 export function Header() {
   document.addEventListener("DOMContentLoaded", function () {
     let header = document.querySelector("header");
-
+    let id = localStorage.getItem('userId')
     header.innerHTML = `
       <img class="logo" src="/logo.svg" alt="">
       <button class="open">Каталог</button>
@@ -9,7 +10,7 @@ export function Header() {
       <div class="navigation">
         <div class="open-modal" popovertarget="modal" tabindex="0" >
           <img src="/user.svg" alt="">
-          <p>Войти</p>
+          <p class="nameAccount">Войти</p>
         </div>
         <div>
           <a href="/src/pages/favoritesList/index.html">Избранное</a>
@@ -18,6 +19,9 @@ export function Header() {
           <a href="/src/pages/basketLIst/index.html">Корзина</a>
         </div>
       </div>`;
+    api.get()
+    let nameAccount = document.querySelector('.nameAccount')
+    nameAccount.textContent = 
 
     let modal = document.querySelector(".modal-container");
 
@@ -53,9 +57,33 @@ export function Header() {
           новый через <span>150</span>сек
         </p>
       </div>`;
+      const inputs = document.querySelectorAll(".number-container input");
+      inputs.forEach((input, index) => {
+        input.addEventListener("input", () => {
+          const next = inputs[index + 1];
+          if (input.value && next) {
+            next.disabled = false;
+            next.focus();
+          }
+
+          if (index === inputs.length - 1 && input.value) {
+            const allFilled = Array.from(inputs).every((inp) => inp.value);
+            if (allFilled) {
+              DataForm();
+            }
+          }
+        });
+
+        input.addEventListener("keydown", (e) => {
+          if (e.key === "Backspace" && !input.value && index > 0) {
+            const prev = inputs[index - 1];
+            input.disabled = true;
+            prev.focus();
+          }
+        });
+      });
       let spanTel = document.querySelector(".tel");
       spanTel.textContent = `+998 ${phoneInput.value}`;
-      const inputs = document.querySelectorAll(".number-container input");
 
       inputs[0].focus();
       inputs.forEach((input, index) => {
@@ -91,6 +119,43 @@ export function Header() {
         modal.querySelector(".modal-window").style.display = "none";
       });
     }
+    function DataForm() {
+      modal.innerHTML = `
+      <div class="modal-window">
+      <h1>Данные пользователя</h1>
+      <form name="reg">
+          <div class="data-form">
+            <p>Имя</p>
+            <input type="text" placeholder="Имя" id="name">
+          </div>
+          <div class="data-form">
+            <p>Фамилия</p>
+            <input type="text" placeholder="Фамилия" id="lastname">
+          </div>
+          <button type="submit">Зарегестрироваться</button>
+          </form>
+          </div>`;
+      let name = document.querySelector("#name");
+      let lastname = document.querySelector("#lastname");
+      let form = document.forms.reg;
+      console.log(name);
+
+      form.onsubmit = (e) => {
+        e.preventDefault();
+        let user = {
+          telephone: phoneInput.value,
+          name: name.value,
+          lastname: lastname.value,
+        };
+        api
+          .post("users", user)
+          .then((res) => {
+            localStorage.setItem("userId", res.data.id)
+          })
+          .catch((error) => console.error(error));
+      };
+      console.log(form);
+    }
 
     const closeBtn = document.createElement("button");
     closeBtn.classList.add("close");
@@ -99,7 +164,6 @@ export function Header() {
 
     const btn = document.createElement("button");
     btn.classList.add("btn");
-    btn.setAttribute("type", "submit");
     btn.textContent = "Получить код";
 
     function mainList() {
@@ -119,17 +183,12 @@ export function Header() {
         </p>
       </div>`;
       const modalWindow = modal.querySelector(".modal-window");
-      const form = modal.querySelector("form");
       phoneInput = document.querySelector("#phoneInput");
+      let form = document.forms.reg;
 
       modalWindow.insertBefore(closeBtn, modalWindow.firstChild);
       form.appendChild(btn);
-      form.onsubmit = (e) => {
-        e.preventDefault();
-        let user = {
-          telephone: phoneInput.value,
-        };
-      };
+      
 
       phoneInput.addEventListener("input", function () {
         let digits = this.value.replace(/\D/g, "");

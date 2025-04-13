@@ -93,6 +93,24 @@ header {
   background-color: rgb(250, 248, 248);
   border: 1px solid gray;
   animation: slideUpFadeIn 0.4s ease-out;
+  .data-form {
+    input {
+      width: 100%;
+      padding: 5px;
+      border: 1px solid gray;
+      outline: none;
+      border-radius: 5px;
+    }
+  }
+  button {
+    width: 100%;
+    margin-top: 20px;
+    padding: 7px;
+    font-size: 15px;
+    border: 1px solid gray;
+    border-radius: 7px;
+    cursor: pointer;
+  }
   img {
     width: 20px;
   }

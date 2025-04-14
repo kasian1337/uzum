@@ -945,10 +945,16 @@
   ],
   "users": [
     {
-      "id": "d4a6",
+      "id": "7316",
       "telephone": "99 999-99-99",
       "name": "alex",
-      "lastname": "history"
+      "lastname": "history",
+      "favorites": {
+        "1": true,
+        "3": true,
+        "4": true
+      },
+      "basket": {}
     }
   ]
 }

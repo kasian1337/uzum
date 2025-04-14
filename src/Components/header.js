@@ -1,4 +1,6 @@
-import { api } from "./../services/api";
+import {
+  api
+} from "./../services/api";
 export function Header() {
   document.addEventListener("DOMContentLoaded", function () {
     let header = document.querySelector("header");
@@ -19,9 +21,15 @@ export function Header() {
           <a href="/src/pages/basketLIst/index.html">Корзина</a>
         </div>
       </div>`;
-    api.get()
     let nameAccount = document.querySelector('.nameAccount')
-    nameAccount.textContent = 
+    api.get("users")
+      .then(res => {
+        let data = res.data.filter((item) => item.id === id)
+        data.forEach((item) => {
+          nameAccount.textContent = item.name;
+        })
+      })
+      .catch(error => console.error(error))
 
     let modal = document.querySelector(".modal-container");
 
@@ -30,10 +38,12 @@ export function Header() {
     back.classList.add("back");
     img.src = "/left.png";
     back.appendChild(img);
+
     function generateCode() {
       return Math.floor(10000 + Math.random() * 90000);
     }
     let phoneInput;
+
     function deflatingList() {
       modal.innerHTML = `
       <div class="modal-window">
@@ -119,6 +129,7 @@ export function Header() {
         modal.querySelector(".modal-window").style.display = "none";
       });
     }
+
     function DataForm() {
       modal.innerHTML = `
       <div class="modal-window">
@@ -138,7 +149,6 @@ export function Header() {
       let name = document.querySelector("#name");
       let lastname = document.querySelector("#lastname");
       let form = document.forms.reg;
-      console.log(name);
 
       form.onsubmit = (e) => {
         e.preventDefault();
@@ -146,6 +156,8 @@ export function Header() {
           telephone: phoneInput.value,
           name: name.value,
           lastname: lastname.value,
+          favorites: {},
+          basket: {},
         };
         api
           .post("users", user)
@@ -153,8 +165,9 @@ export function Header() {
             localStorage.setItem("userId", res.data.id)
           })
           .catch((error) => console.error(error));
+        modal.style.display = 'none'
+        backdrop.style.display = 'none'
       };
-      console.log(form);
     }
 
     const closeBtn = document.createElement("button");
@@ -188,7 +201,7 @@ export function Header() {
 
       modalWindow.insertBefore(closeBtn, modalWindow.firstChild);
       form.appendChild(btn);
-      
+
 
       phoneInput.addEventListener("input", function () {
         let digits = this.value.replace(/\D/g, "");

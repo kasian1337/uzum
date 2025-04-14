@@ -135,7 +135,7 @@ header {
     .clicker {
       flex-direction: row;
       gap: 24px;
-      width: 11vh;
+      width: max-content;
       border: 1px solid #acacac;
       border-radius: 3px;
       padding: 5px 6px;

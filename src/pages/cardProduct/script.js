@@ -22,7 +22,6 @@ Promise.all([product])
   .catch((error) => console.error(error));
 
 function data(data) {
-  console.log(data);
   let imgScrol = document.querySelector(".img-scrol");
   let imgProduct = document.querySelector(".img-product");
   imgProduct.src = data.media[0];

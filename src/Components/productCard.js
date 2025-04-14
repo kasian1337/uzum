@@ -1,3 +1,7 @@
+import {
+  api
+} from "../services/api";
+
 export function CreateProductCardElement(product) {
   const productCard = document.createElement("div");
   productCard.className = "product-card";
@@ -8,7 +12,24 @@ export function CreateProductCardElement(product) {
   likeIcon.alt = "Like";
   likeIcon.addEventListener("click", (e) => {
     e.stopPropagation();
+    const id = localStorage.getItem("userId");
     likeIcon.src = "/like-bg.png"
+    api.get(`users/${id}`)
+      .then(res => {
+        const userData = res.data;
+
+        if (!userData.favorites) {
+          userData.favorites = {};
+        }
+
+        userData.favorites[product.id] = true;
+
+        return api.patch(`users/${id}`, userData);
+      })
+      .then(res => {
+        console.log("Лайк добавлен:", res.data);
+      })
+      .catch(err => console.error("Ошибка:", err));
   })
 
   const productImage = document.createElement("img");

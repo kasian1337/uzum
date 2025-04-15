@@ -954,7 +954,9 @@
         "3": true,
         "4": true
       },
-      "basket": {}
+      "basket": {
+        "4": true
+      }
     }
   ]
 }

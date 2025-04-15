@@ -10,9 +10,9 @@ export function CreateProductCardElement(product) {
   likeIcon.className = "like";
   likeIcon.src = "/like.svg";
   likeIcon.alt = "Like";
+  const id = localStorage.getItem("userId");
   likeIcon.addEventListener("click", (e) => {
     e.stopPropagation();
-    const id = localStorage.getItem("userId");
     likeIcon.src = "/like-bg.png"
     api.get(`users/${id}`)
       .then(res => {
@@ -27,9 +27,9 @@ export function CreateProductCardElement(product) {
         return api.patch(`users/${id}`, userData);
       })
       .then(res => {
-        console.log("Лайк добавлен:", res.data);
+        console.log(res.data);
       })
-      .catch(err => console.error("Ошибка:", err));
+      .catch(error => console.error(error));
   })
 
   const productImage = document.createElement("img");
@@ -63,6 +63,25 @@ export function CreateProductCardElement(product) {
 
   const cartIconContainer = document.createElement("div");
   cartIconContainer.className = "img";
+  cartIconContainer.addEventListener("click", (e) => {
+    e.stopPropagation();
+    api.get(`users/${id}`)
+      .then(res => {
+        const userData = res.data;
+
+        if (!userData.favorites) {
+          userData.favorites = {};
+        }
+
+        userData.basket[product.id] = true;
+
+        return api.patch(`users/${id}`, userData);
+      })
+      .then(res => {
+        console.log(res.data);
+      })
+      .catch(error => console.error(error));
+  });
 
   const cartIcon = document.createElement("img");
   cartIcon.src = "/shopping-cart.svg";

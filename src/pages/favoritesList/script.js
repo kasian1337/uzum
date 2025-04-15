@@ -21,15 +21,16 @@ Promise.all([user, good])
     const favoriteIds = Object.keys(currentUser.favorites);
     const favoriteGoods = goods.data.filter(item => favoriteIds.includes(String(item.id)));
 
-    let containerGood = document.querySelector('div');
-    
-    containerGood.innerHTML = '';
+    const emptyState = document.getElementById("empty-state");
+    const cardContainer = document.getElementById("card-container");
 
     if (favoriteGoods.length === 0) {
-      containerGood.style.display = 'none';
+      emptyState.style.display = "flex";
+      cardContainer.style.display = "none";
     } else {
-      containerGood.style.display = 'block';
-      render(favoriteGoods, containerGood, CreateProductCardElement);
+      emptyState.style.display = "none";
+      cardContainer.style.display = "grid";
+      render(favoriteGoods, cardContainer, CreateProductCardElement);
     }
   })
   .catch(error => console.error(error));

@@ -11,10 +11,10 @@
 }
 
 header {
-  display: flex;
-  align-items: center;
-  gap: 37px;
-  padding: 26px 0;
+  width: 100%;
+  position: relative;
+  z-index: 9999;
+  background-color: white;
 
   & img {
     cursor: pointer;
@@ -62,11 +62,73 @@ header {
       }
     }
 
-    & a {
+    & a,
+    p {
       text-decoration: none;
       color: black;
+      cursor: pointer;
     }
   }
+  .dialog {
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+    margin-bottom: 50px;
+    margin-left: 408px;
+    span {
+      margin-bottom: 11px;
+      font-weight: 700;
+      font-size: 12px;
+      line-height: 100%;
+      vertical-align: middle;
+      color: #acacac;
+    }
+    div {
+      display: flex;
+      align-items: center;
+      gap: 17px;
+      p {
+        font-weight: 600;
+        font-size: 32px;
+        line-height: 100%;
+        vertical-align: middle;
+      }
+      .quantity-display {
+        padding: 1px 7px;
+        border-radius: 2px;
+        background-color: #7000ff;
+        p {
+          color: white;
+          font-weight: 500;
+          font-size: 12px;
+          line-height: 100%;
+          vertical-align: middle;
+        }
+        span {
+          color: white;
+        }
+      }
+    }
+  }
+}
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 9998;
+}
+#header-backdrop {
+  background: rgba(0, 0, 0, 0.686);
+  backdrop-filter: blur(10px);
+}
+.notactive {
+  display: none;
+}
+.flex-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 37px;
+  padding: 26px 0;
 }
 .data-product {
   display: flex;

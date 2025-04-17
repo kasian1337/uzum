@@ -6,21 +6,65 @@ export function Header() {
     let header = document.querySelector("header");
     let id = localStorage.getItem('userId')
     header.innerHTML = `
-      <img class="logo" src="/logo.svg" alt="">
-      <button class="open">Каталог</button>
-      <input type="text" placeholder="Искать товары">
-      <div class="navigation">
-        <div class="open-modal" popovertarget="modal" tabindex="0" >
-          <img src="/user.svg" alt="">
-          <p class="nameAccount">Войти</p>
+      <div class="flex-wrapper container">
+        <img class="logo" src="/logo.svg" alt="" />
+        <button class="open">Каталог</button>
+        <input type="text" placeholder="Искать товары" />
+        <div class="navigation">
+          <div class="open-modal" popovertarget="modal" tabindex="0">
+            <img src="/user.svg" alt="" />
+            <p class="nameAccount">Войти</p>
+          </div>
+          <div>
+            <a href="/src/pages/favoritesList/index.html">Избранное</a>
+          </div>
+          <div>
+            <a href="/src/pages/basketLIst/index.html">Корзина</a>
+          </div>
         </div>
-        <div>
-          <a href="/src/pages/favoritesList/index.html">Избранное</a>
-        </div>
-        <div>
-          <a href="/src/pages/basketLIst/index.html">Корзина</a>
+      </div>
+      <div class="dialog-container notactive">
+        <div class="dialog">
+          <span>Категории товаров</span>
+          <div>
+            <p>Мебель</p>
+            <div class="quantity-display">
+              <p><span id="quantity"></span>товара</p>
+            </div>
+          </div>
+          <div>
+            <p>Компьютер</p>
+            <div class="quantity-display">
+              <p><span id="quantity"></span>товара</p>
+            </div>
+          </div>
+          <div>
+            <p>Аудио</p>
+            <div class="quantity-display">
+              <p><span id="quantity"></span>товара</p>
+            </div>
+          </div>
+          <div>
+            <p>Телевизор</p>
+            <div class="quantity-display">
+              <p><span id="quantity"></span>товара</p>
+            </div>
+          </div>
+          <div>
+            <p>Кухня</p>
+            <div class="quantity-display">
+              <p><span id="quantity"></span>товара</p>
+            </div>
+          </div>
         </div>
       </div>`;
+    let dialogContainer = document.querySelector('.dialog-container')
+    let katalogBtn = document.querySelector(".open")
+    let headerBackdrop = document.querySelector("#header-backdrop")
+    katalogBtn.addEventListener("click", (e) => {
+      dialogContainer.classList.remove("notactive");
+      headerBackdrop.style.display = "block"
+    })
     let nameAccount = document.querySelector('.nameAccount')
     api.get("users")
       .then(res => {

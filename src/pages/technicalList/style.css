@@ -1,9 +1,8 @@
 * {
-  padding: 0;
   margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
-
 .container {
   width: 100%;
   max-width: 1210px;
@@ -153,6 +152,12 @@ header {
 .active {
   display: block;
 }
+.flex-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 37px;
+  padding: 26px 0;
+}
 .backdrop {
   position: fixed;
   inset: 0;
@@ -163,175 +168,22 @@ header {
   background: rgba(0, 0, 0, 0.686);
   backdrop-filter: blur(10px);
 }
-.notactive {
-  display: none;
-}
-.flex-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 37px;
-  padding: 26px 0;
-}
 section {
-  width: 100%;
-  height: 80vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  #empty-state {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    h1 {
-      font-weight: 600;
-      font-size: 32px;
-    }
-    span {
-      font-weight: 500;
-      font-size: 14px;
-      text-align: center;
-    }
+  padding-top: 50px;
+  h1 {
+    font-weight: 600;
+    font-size: 28px;
+    line-height: 36px;
   }
-}
-#empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  text-align: center;
-}
-
-#empty-state h1 {
-  font-weight: 600;
-  font-size: 32px;
-}
-
-#empty-state span {
-  font-weight: 500;
-  font-size: 14px;
-}
-
-/* Сетка карточек */
-.card {
-  padding-top: 31px;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(205px, 1fr));
-  gap: 48px;
-  width: 100%;
-  max-width: 1210px;
-}
-
-/* Карточка товара */
-.card .product-card {
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  border-radius: 16px;
-  position: relative;
-  background: #ffffff;
-  padding: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  min-height: 400px;
-  height: 100%;
-}
-
-.card .product-card:hover {
-  transform: translateY(-12px);
-  box-shadow: 0 20px 24px -8px rgba(0, 0, 0, 0.15);
-  background: linear-gradient(135deg, #ffffff, #f9f9f9);
-}
-
-.card .poster {
-  width: 100%;
-  height: 250px;
-  border-radius: 12px;
-  object-fit: contain;
-  flex-shrink: 0;
-}
-
-.card .like {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  width: 24px;
-  height: 24px;
-  background-size: contain;
-  opacity: 0.7;
-  transition: all 0.2s ease;
-}
-
-.card .like:hover {
-  opacity: 1;
-  transform: scale(1.2);
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-}
-
-.card .data-product {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 8px;
-  padding: 5px;
-  flex-grow: 1;
-}
-
-.card .product-name {
-  font-weight: 600;
-  font-size: 15px;
-  color: #333;
-  line-height: 1.2;
-  max-width: 180px;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  word-wrap: break-word;
-}
-
-.card .between {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: auto;
-}
-
-.card .price {
-  display: flex;
-  flex-direction: column;
-}
-
-.card .price span {
-  font-weight: 500;
-  font-size: 12px;
-  text-decoration: line-through;
-  color: #999;
-}
-
-.card .price p {
-  font-weight: 700;
-  font-size: 16px;
-}
-
-.card .img {
-  padding: 5px;
-  border: 1px solid #ddd;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #f9f9f9;
-  transition: all 0.2s ease;
-}
-
-.card .img:hover {
-  background: #fff;
-}
-
-.card .img img {
-  width: 16px;
-  height: 16px;
+  .data-form {
+    padding: 20px;
+    border: 1px solid gray;
+  }
+  .userData {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    grid-column-gap: 46px;
+    grid-row-gap: 36px;
+  }
 }

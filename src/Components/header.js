@@ -1,4 +1,7 @@
 import {
+  render
+} from "../libs/utils";
+import {
   api
 } from "./../services/api";
 export function Header() {
@@ -9,7 +12,7 @@ export function Header() {
       <div class="flex-wrapper container">
         <img class="logo" src="/logo.svg" alt="" />
         <button class="open">Каталог</button>
-        <input type="text" placeholder="Искать товары" />
+        <input type="text" placeholder="Искать товары" onkeyup="processChange()" id="searchInput" />
         <div class="navigation">
           <div class="open-modal" popovertarget="modal" tabindex="0">
             <img src="/user.svg" alt="" />
@@ -23,34 +26,40 @@ export function Header() {
           </div>
         </div>
       </div>
-      <div class="dialog-container notactive">
+      <div class="dialog-container notactive" id="searchs">
+        <div class="dialog">
+          <span>Поиск</span>
+          <div id="search-results-list"></div>
+        </div>
+      </div>
+      <div class="dialog-container notactive" id="dialog">
         <div class="dialog">
           <span>Категории товаров</span>
-          <div>
+          <div class="diaplayFlex">
             <p>Мебель</p>
             <div class="quantity-display">
               <p><span id="quantity"></span>товара</p>
             </div>
           </div>
-          <div>
+          <div class="diaplayFlex">
             <p>Компьютер</p>
             <div class="quantity-display">
               <p><span id="quantity"></span>товара</p>
             </div>
           </div>
-          <div>
+          <div class="diaplayFlex">
             <p>Аудио</p>
             <div class="quantity-display">
               <p><span id="quantity"></span>товара</p>
             </div>
           </div>
-          <div>
+          <div class="diaplayFlex">
             <p>Телевизор</p>
             <div class="quantity-display">
               <p><span id="quantity"></span>товара</p>
             </div>
           </div>
-          <div>
+          <div class="diaplayFlex">
             <p>Кухня</p>
             <div class="quantity-display">
               <p><span id="quantity"></span>товара</p>
@@ -58,7 +67,82 @@ export function Header() {
           </div>
         </div>
       </div>`;
-    let dialogContainer = document.querySelector('.dialog-container')
+    const searchInput = document.getElementById("searchInput"); // input с onkeyup
+    const searchBox = document.getElementById("searchs"); // модальное окно
+    const searchResultsList = document.getElementById("search-results-list"); // внутренняя часть с результатами
+
+    let activeCategory = "furniture"; // сделай динамическим, если нужно
+
+
+    // Получаем данные из API
+    const fetchSearchResults = async (query) => {
+      try {
+        const {
+          data
+        } = await api.get(`/goods?title_like=${query}`);
+
+        // Фильтруем по категории (если нужно)
+        const filteredResults = data.filter(item => item.type === activeCategory);
+
+        if (filteredResults.length > 0) {
+          renderDialog(filteredResults);
+          searchBox.classList.remove("notactive");
+          searchBox.classList.add("active");
+        } else {
+          hideDialog();
+        }
+      } catch (error) {
+        console.error("Ошибка при поиске:", error);
+        hideDialog();
+      }
+    };
+
+    // Рендер результатов в модальном окне
+    const renderDialog = (results) => {
+      searchResultsList.innerHTML = "";
+
+      results.forEach(item => {
+        const p = document.createElement("p");
+        p.textContent = item.title;
+        p.className = "search-result-item";
+        searchResultsList.appendChild(p);
+      });
+    };
+
+    // Скрываем модалку
+    const hideDialog = () => {
+      searchBox.classList.remove("active");
+      searchBox.classList.add("notactive");
+      searchResultsList.innerHTML = "";
+    };
+
+    // Дебаунс
+    function debounce(func, timeout = 500) {
+      let timer;
+      return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => func.apply(this, args), timeout);
+      };
+    }
+
+    // Обработчик с дебаунсом
+    const processChange = debounce((query) => fetchSearchResults(query), 400);
+
+    // Слушаем ввод в инпут
+    searchInput.addEventListener("keyup", () => {
+      const query = searchInput.value.trim();
+
+      if (query.length < 2) {
+        hideDialog();
+        return;
+      }
+      headerBackdrop.style.display = "block";
+      processChange(query);
+    });
+
+
+
+    let dialogContainer = document.querySelector('#dialog')
     let katalogBtn = document.querySelector(".open")
     let headerBackdrop = document.querySelector("#header-backdrop")
     katalogBtn.addEventListener("click", (e) => {
@@ -280,12 +364,17 @@ export function Header() {
 
     const openDiv = document.querySelector(".open-modal");
     const backdrop = document.getElementById("modal-backdrop");
-
-    openDiv.addEventListener("click", () => {
-      mainList();
-      backdrop.style.display = "block";
-      modal.querySelector(".modal-window").style.display = "block";
-    });
+    if (nameAccount === 'Войти') { 
+      openDiv.addEventListener("click", () => {
+        mainList();
+        backdrop.style.display = "block";
+        modal.querySelector(".modal-window").style.display = "block";
+      });
+    } else {
+      openDiv.addEventListener("click", () => {
+        window.location.href = '/src/pages/technicalList/'
+      })
+    }
 
     const logo = document.querySelector(".logo");
     logo.addEventListener("click", () => {

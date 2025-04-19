@@ -10,15 +10,64 @@
     <header></header>
     <div id="header-backdrop" class="backdrop" hidden></div>
     <section class="container">
-      <h1>Ирода Жумаева</h1>
-      <div class="data-form">
-        <form name="userData">
-            <div class="form-group">
-                <span>Фамилия</span>
-                
+      <form name="userData">
+        <h1>Ирода Жумаева</h1>
+        <div class="data-form">
+          <div class="form-group div1">
+            <span>Фамилия</span>
+            <div class="input-container">
+              <input type="text" id="lastname" />
+              <div class="clear-input notactive">х</div>
             </div>
-        </form>
-      </div>
+          </div>
+          <div class="form-group div2">
+            <span>Имя</span>
+            <div class="input-container">
+              <input type="text" id="name" />
+              <div class="clear-input notactive">х</div>
+            </div>
+          </div>
+          <div class="form-group div3">
+            <span>Отчество</span>
+            <div class="input-container">
+              <input type="text" id="patronymic" />
+              <div class="clear-input notactive">х</div>
+            </div>
+          </div>
+          <div class="form-group div4">
+            <span>Дата рождения</span>
+            <input type="date" id="birthdate" />
+          </div>
+          <div class="form-group div5">
+            <span>Пол</span>
+            <div class="btn">
+              <button id="male">Мужской</button>
+              <button id="female">Женский</button>
+            </div>
+          </div>
+          <div class="form-group div6">
+            <span>Электронная почта</span>
+            <div class="input-container">
+              <input type="text" id="email" />
+              <div class="clear-input notactive">х</div>
+            </div>
+          </div>
+          <div class="form-group div7">
+            <span>Номер телефона</span>
+            <div class="input-container">
+              <input type="text" id="phone" />
+              <div class="clear-input notactive">х</div>
+            </div>
+          </div>
+        </div>
+        <div class="texnical-btn">
+          <button>Выйт из системы</button>
+          <div class="btn-group notactive">
+            <button class="btn-cancel">Отменить</button>
+            <button class="btn-save" type="submit">Сохранить</button>
+          </div>
+        </div>
+      </form>
     </section>
     <script type="module" src="./../technicalList/script.js"></script>
   </body>

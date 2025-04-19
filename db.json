@@ -956,7 +956,11 @@
       },
       "basket": {
         "4": true
-      }
+      },
+      "patronymic": "",
+      "birthdate": "1111-11-11",
+      "email": "bazarovshaxriyor990@gmail.com",
+      "floor": "Мужчина"
     }
   ]
 }

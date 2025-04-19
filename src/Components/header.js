@@ -67,21 +67,16 @@ export function Header() {
           </div>
         </div>
       </div>`;
-    const searchInput = document.getElementById("searchInput"); // input с onkeyup
-    const searchBox = document.getElementById("searchs"); // модальное окно
-    const searchResultsList = document.getElementById("search-results-list"); // внутренняя часть с результатами
+    const searchInput = document.getElementById("searchInput");
+    const searchBox = document.getElementById("searchs");
+    const searchResultsList = document.getElementById("search-results-list");
 
-    let activeCategory = "furniture"; // сделай динамическим, если нужно
-
-
-    // Получаем данные из API
     const fetchSearchResults = async (query) => {
       try {
         const {
           data
         } = await api.get(`/goods?title_like=${query}`);
 
-        // Фильтруем по категории (если нужно)
         const filteredResults = data.filter(item => item.type === activeCategory);
 
         if (filteredResults.length > 0) {
@@ -97,7 +92,6 @@ export function Header() {
       }
     };
 
-    // Рендер результатов в модальном окне
     const renderDialog = (results) => {
       searchResultsList.innerHTML = "";
 
@@ -109,14 +103,12 @@ export function Header() {
       });
     };
 
-    // Скрываем модалку
     const hideDialog = () => {
       searchBox.classList.remove("active");
       searchBox.classList.add("notactive");
       searchResultsList.innerHTML = "";
     };
 
-    // Дебаунс
     function debounce(func, timeout = 500) {
       let timer;
       return (...args) => {
@@ -125,10 +117,8 @@ export function Header() {
       };
     }
 
-    // Обработчик с дебаунсом
     const processChange = debounce((query) => fetchSearchResults(query), 400);
 
-    // Слушаем ввод в инпут
     searchInput.addEventListener("keyup", () => {
       const query = searchInput.value.trim();
 

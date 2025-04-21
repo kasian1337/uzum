@@ -70,10 +70,14 @@ header {
     }
   }
   .dialog {
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 13px;
-    margin-left: 408px;
+    padding-left: 408px;
+    padding-bottom: 30px;
+    background-color: white;
+    position: absolute;
     margin-bottom: 50px;
     z-index: 100;
     span {
@@ -128,6 +132,7 @@ header {
         font-size: 32px;
         line-height: 100%;
         vertical-align: middle;
+        cursor: pointer;
       }
       .quantity-display {
         padding: 1px 7px;

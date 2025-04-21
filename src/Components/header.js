@@ -67,9 +67,24 @@ export function Header() {
           </div>
         </div>
       </div>`;
+    let quantity = document.querySelectorAll("#quantity");
+    api.get("goods")
+      .then((res) => {
+        let furniture = res.data.filter((item) => item.type === "furniture")
+        quantity[0].textContent = furniture.length + ' '
+        let PC = res.data.filter((item) => item.type === "PC")
+        quantity[1].textContent = PC.length + ' '
+        let audio = res.data.filter((item) => item.type === "audio")
+        quantity[2].textContent = audio.length + ' '
+        let TV = res.data.filter((item) => item.type === "TV")
+        quantity[3].textContent = TV.length + ' '
+        let kitchen = res.data.filter((item) => item.type === "kitchen")
+        quantity[4].textContent = kitchen.length + ' '
+      })
     const searchInput = document.getElementById("searchInput");
     const searchBox = document.getElementById("searchs");
     const searchResultsList = document.getElementById("search-results-list");
+    const activeCategory = "Мебель";
 
     const fetchSearchResults = async (query) => {
       try {
@@ -354,7 +369,7 @@ export function Header() {
 
     const openDiv = document.querySelector(".open-modal");
     const backdrop = document.getElementById("modal-backdrop");
-    if (nameAccount === 'Войти') { 
+    if (nameAccount === 'Войти') {
       openDiv.addEventListener("click", () => {
         mainList();
         backdrop.style.display = "block";

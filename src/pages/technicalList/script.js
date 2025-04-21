@@ -94,3 +94,8 @@ form.addEventListener('submit', (e) => {
     api.patch(`/users/${id}`, formDataObject)
         .catch(error => console.error(error));
 })
+let logOut = document.querySelector('#log-out')
+logOut.addEventListener('click', () => {
+    localStorage.removeItem('userId')
+    window.location.href = '/index.html'
+})

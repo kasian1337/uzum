@@ -37,29 +37,29 @@ export function Header() {
           <span>Категории товаров</span>
           <div class="diaplayFlex">
             <p>Мебель</p>
-            <div class="quantity-display">
+            <div class="quantity-display" data-target=".furniture">
               <p><span id="quantity"></span>товара</p>
             </div>
           </div>
-          <div class="diaplayFlex">
+          <div class="diaplayFlex" data-target=".computers">
             <p>Компьютер</p>
             <div class="quantity-display">
               <p><span id="quantity"></span>товара</p>
             </div>
           </div>
-          <div class="diaplayFlex">
+          <div class="diaplayFlex" data-target=".audios">
             <p>Аудио</p>
             <div class="quantity-display">
               <p><span id="quantity"></span>товара</p>
             </div>
           </div>
-          <div class="diaplayFlex">
+          <div class="diaplayFlex" data-target=".TV-container">
             <p>Телевизор</p>
             <div class="quantity-display">
               <p><span id="quantity"></span>товара</p>
             </div>
           </div>
-          <div class="diaplayFlex">
+          <div class="diaplayFlex" data-target=".kitchens">
             <p>Кухня</p>
             <div class="quantity-display">
               <p><span id="quantity"></span>товара</p>
@@ -67,6 +67,27 @@ export function Header() {
           </div>
         </div>
       </div>`;
+    const categories = document.querySelectorAll(".diaplayFlex");
+
+    let headerBackdrop = document.querySelector("#header-backdrop")
+    let dialogContainer = document.querySelector('#dialog')
+    categories.forEach((category) => {
+      category.addEventListener("click", () => {
+        const selector = category.getAttribute("data-target");
+        const targetElement = document.querySelector(selector);
+
+        if (targetElement) {
+          targetElement.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+          });
+          headerBackdrop.style.display = "none";
+          dialogContainer.style.display = "none";
+        }
+      });
+    });
+
+
     let quantity = document.querySelectorAll("#quantity");
     api.get("goods")
       .then((res) => {
@@ -147,9 +168,7 @@ export function Header() {
 
 
 
-    let dialogContainer = document.querySelector('#dialog')
     let katalogBtn = document.querySelector(".open")
-    let headerBackdrop = document.querySelector("#header-backdrop")
     katalogBtn.addEventListener("click", (e) => {
       dialogContainer.classList.remove("notactive");
       headerBackdrop.style.display = "block"

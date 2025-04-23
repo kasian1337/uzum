@@ -14,24 +14,21 @@ export function CreateProductCardElement(product) {
   likeIcon.addEventListener("click", (e) => {
     e.stopPropagation();
     likeIcon.src = "/like-bg.png"
-    api.get(`users/${id}`)
-      .then(res => {
-        const userData = res.data;
-
-        if (!userData.favorites) {
-          userData.favorites = {};
-        }
-
+    const users = api.get(`users/${id}`)
+    const goods = api.get(`goods`)
+    Promise.all([users, goods])
+      .then(([users, goods]) => {
+        const userData = users.data;
+        const goodsData = goods.data;
+        console.log(typeof goodsData);
+        
         userData.favorites[product.id] = true;
 
         return api.patch(`users/${id}`, userData);
       })
-      .then(res => {
-        console.log(res.data);
-      })
-      .catch(error => console.error(error));
-  })
 
+
+  })
   const productImage = document.createElement("img");
   productImage.className = "poster";
   productImage.src = product.media[0];

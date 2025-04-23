@@ -12,9 +12,9 @@ export function Header() {
       <div class="flex-wrapper container">
         <img class="logo" src="/logo.svg" alt="" />
         <button class="open">Каталог</button>
-        <input type="text" placeholder="Искать товары" onkeyup="processChange()" id="searchInput" />
+        <input type="text" placeholder="Искать товары" id="searchInput"  />
         <div class="navigation">
-          <div class="open-modal" popovertarget="modal" tabindex="0">
+          <div class="open-modal" popovertarget="modal" tabindex="0" id="open-modal">
             <img src="/user.svg" alt="" />
             <p class="nameAccount">Войти</p>
           </div>
@@ -102,69 +102,64 @@ export function Header() {
         let kitchen = res.data.filter((item) => item.type === "kitchen")
         quantity[4].textContent = kitchen.length + ' '
       })
-    const searchInput = document.getElementById("searchInput");
-    const searchBox = document.getElementById("searchs");
-    const searchResultsList = document.getElementById("search-results-list");
-    const activeCategory = "Мебель";
-
-    const fetchSearchResults = async (query) => {
-      try {
-        const {
-          data
-        } = await api.get(`/goods?title_like=${query}`);
-
-        const filteredResults = data.filter(item => item.type === activeCategory);
-
-        if (filteredResults.length > 0) {
-          renderDialog(filteredResults);
-          searchBox.classList.remove("notactive");
-          searchBox.classList.add("active");
-        } else {
+      const searchInput = document.getElementById("searchInput");
+      const searchBox = document.getElementById("searchs");
+      const searchResultsList = document.getElementById("search-results-list");
+      
+      const fetchSearchResults = async (query) => {
+        try {
+          const { data } = await api.get(`/goods?title_like=${query}&type=furniture`);
+      
+          if (data.length > 0) {
+            renderDialog(data);
+            searchBox.classList.remove("notactive");
+            searchBox.classList.add("active");
+          } else {
+            hideDialog();
+          }
+        } catch (error) {
+          console.error("Ошибка при поиске:", error);
           hideDialog();
         }
-      } catch (error) {
-        console.error("Ошибка при поиске:", error);
-        hideDialog();
-      }
-    };
-
-    const renderDialog = (results) => {
-      searchResultsList.innerHTML = "";
-
-      results.forEach(item => {
-        const p = document.createElement("p");
-        p.textContent = item.title;
-        p.className = "search-result-item";
-        searchResultsList.appendChild(p);
-      });
-    };
-
-    const hideDialog = () => {
-      searchBox.classList.remove("active");
-      searchBox.classList.add("notactive");
-      searchResultsList.innerHTML = "";
-    };
-
-    function debounce(func, timeout = 500) {
-      let timer;
-      return (...args) => {
-        clearTimeout(timer);
-        timer = setTimeout(() => func.apply(this, args), timeout);
       };
-    }
-
-    const processChange = debounce((query) => fetchSearchResults(query), 400);
-
-    searchInput.addEventListener("keyup", () => {
-      const query = searchInput.value.trim();
-
-      if (query.length < 2) {
-        hideDialog();
-        return;
+      
+      const renderDialog = (results) => {
+        searchResultsList.innerHTML = "";
+      
+        results.forEach(item => {
+          const p = document.createElement("p");
+          p.textContent = item.title;
+          p.className = "search-result-item";
+          searchResultsList.appendChild(p);
+        });
+      };
+      
+      const hideDialog = () => {
+        searchBox.classList.remove("active");
+        searchBox.classList.add("notactive");
+        searchResultsList.innerHTML = "";
+      };
+      
+      function debounce(func, timeout = 500) {
+        let timer;
+        return (...args) => {
+          clearTimeout(timer);
+          timer = setTimeout(() => func.apply(this, args), timeout);
+        };
       }
-      headerBackdrop.style.display = "block";
-      processChange(query);
-    });
+      
+      let processChange = debounce((query) => fetchSearchResults(query), 400);
+      
+      searchInput.addEventListener("keyup", (event) => {
+        const query = event.target.value.trim();
+        if (query.length < 2) {
+          hideDialog();
+          return;
+        }
+        processChange(query);
+      });
+      
+
 
 
 
@@ -351,6 +346,49 @@ export function Header() {
       phoneInput = document.querySelector("#phoneInput");
       let form = document.forms.reg;
 
+      function formatPhone(phone) {
+        let formatted = "";
+        if (phone.length >= 2) formatted += phone.substring(0, 2);
+        if (phone.length >= 5) formatted += " " + phone.substring(2, 5);
+        if (phone.length >= 7) formatted += "-" + phone.substring(5, 7);
+        if (phone.length === 9) formatted += "-" + phone.substring(7, 9);
+        return formatted;
+      }
+
+      form.onsubmit = (e) => {
+        e.preventDefault();
+
+        const rawPhone = phoneInput.value.replace(/\D/g, "");
+        if (rawPhone.length !== 9) {
+          alert("Введите корректный номер (9 цифр).");
+          return;
+        }
+
+
+        const formattedPhone = formatPhone(rawPhone);
+
+        api.get("users")
+          .then(res => {
+            const existingUser = res.data.find(user => user.telephone === formattedPhone);
+
+            if (existingUser) {
+              localStorage.setItem("userId", existingUser.id);
+              backdrop.style.display = "none";
+              modal.querySelector(".modal-window").style.display = "none";
+              location.reload();
+            } else {
+              deflatingList();
+            }
+          })
+          .catch(error => {
+            console.error("Ошибка при проверке номера:", error);
+          });
+      };
+
+      btn.addEventListener("click", () => {
+        form.requestSubmit();
+      });
+
       modalWindow.insertBefore(closeBtn, modalWindow.firstChild);
       form.appendChild(btn);
 
@@ -384,21 +422,40 @@ export function Header() {
         backdrop.style.display = "none";
         modal.querySelector(".modal-window").style.display = "none";
       });
+
     }
 
-    const openDiv = document.querySelector(".open-modal");
     const backdrop = document.getElementById("modal-backdrop");
-    if (nameAccount === 'Войти') {
-      openDiv.addEventListener("click", () => {
-        mainList();
-        backdrop.style.display = "block";
-        modal.querySelector(".modal-window").style.display = "block";
-      });
-    } else {
-      openDiv.addEventListener("click", () => {
-        window.location.href = '/src/pages/technicalList/'
-      })
+    const openDiv = document.querySelector("#open-modal");
+
+    function updateClickHandler() {
+      if (nameAccount.textContent.trim().toLowerCase() === 'войти') {
+        openDiv.removeEventListener("click", redirectToTechnicalList);
+        openDiv.addEventListener("click", openModal);
+      } else {
+        openDiv.removeEventListener("click", openModal);
+        openDiv.addEventListener("click", redirectToTechnicalList);
+      }
     }
+
+    function openModal() {
+      mainList();
+      backdrop.style.display = "block";
+      modal.querySelector(".modal-window").style.display = "block";
+    }
+
+    function redirectToTechnicalList() {
+      window.location.href = '/src/pages/technicalList/';
+    }
+
+    const observer = new MutationObserver(updateClickHandler);
+    observer.observe(nameAccount, {
+      childList: true,
+      subtree: true
+    });
+
+    updateClickHandler();
+
 
     const logo = document.querySelector(".logo");
     logo.addEventListener("click", () => {

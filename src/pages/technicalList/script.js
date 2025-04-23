@@ -97,5 +97,5 @@ form.addEventListener('submit', (e) => {
 let logOut = document.querySelector('#log-out')
 logOut.addEventListener('click', () => {
     localStorage.removeItem('userId')
-    window.location.href = '/index.html'
+    window.location.replace('/')
 })

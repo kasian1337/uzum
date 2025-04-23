@@ -949,12 +949,7 @@
       "telephone": "99 999-99-99",
       "name": "alex",
       "lastname": "history",
-      "favorites": {
-        "1": true,
-        "3": true,
-        "4": true,
-        "6": true
-      },
+      "favorites": {},
       "basket": {
         "4": true
       },

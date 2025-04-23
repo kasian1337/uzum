@@ -13,22 +13,47 @@ export function CreateProductCardElement(product) {
   const id = localStorage.getItem("userId");
   likeIcon.addEventListener("click", (e) => {
     e.stopPropagation();
-    likeIcon.src = "/like-bg.png"
-    const users = api.get(`users/${id}`)
-    const goods = api.get(`goods`)
+    
+    // Получаем данные о пользователе и товарах
+    const users = api.get(`users/${id}`);
+    const goods = api.get(`goods`);
+    
     Promise.all([users, goods])
       .then(([users, goods]) => {
         const userData = users.data;
-        const goodsData = goods.data;
-        console.log(typeof goodsData);
-        
-        userData.favorites[product.id] = true;
 
-        return api.patch(`users/${id}`, userData);
-      })
+        if (userData.favorites[product.id]) {
+            likeIcon.src = "/like.svg";
+
+            delete userData.favorites[product.id];
+
+            api.patch(`users/${id}`, userData);
+
+            localStorage.removeItem(`liked-${product.id}`);
+        } else {
+            likeIcon.src = "/like-bg.png";
+
+            userData.favorites[product.id] = true;
+
+            api.patch(`users/${id}`, userData);
+
+            localStorage.setItem(`liked-${product.id}`, 'true');
+        }
+      });
+});
+
+window.addEventListener("load", () => {
+    const isLiked = localStorage.getItem(`liked-${product.id}`);
+
+    if (isLiked === 'true') {
+        likeIcon.src = "/like-bg.png";  
+    } else {
+        likeIcon.src = "/like.svg";  
+    }
+});
 
 
-  })
+
   const productImage = document.createElement("img");
   productImage.className = "poster";
   productImage.src = product.media[0];

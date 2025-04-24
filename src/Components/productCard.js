@@ -6,6 +6,7 @@ export function CreateProductCardElement(product) {
   const productCard = document.createElement("div");
   productCard.className = "product-card";
 
+
   const likeIcon = document.createElement("img");
   likeIcon.className = "like";
   likeIcon.src = "/like.svg";
@@ -13,44 +14,43 @@ export function CreateProductCardElement(product) {
   const id = localStorage.getItem("userId");
   likeIcon.addEventListener("click", (e) => {
     e.stopPropagation();
-    
-    // Получаем данные о пользователе и товарах
+
     const users = api.get(`users/${id}`);
     const goods = api.get(`goods`);
-    
+
     Promise.all([users, goods])
       .then(([users, goods]) => {
         const userData = users.data;
 
         if (userData.favorites[product.id]) {
-            likeIcon.src = "/like.svg";
+          likeIcon.src = "/like.svg";
 
-            delete userData.favorites[product.id];
+          delete userData.favorites[product.id];
 
-            api.patch(`users/${id}`, userData);
+          api.patch(`users/${id}`, userData);
 
-            localStorage.removeItem(`liked-${product.id}`);
+          localStorage.removeItem(`liked-${product.id}`);
         } else {
-            likeIcon.src = "/like-bg.png";
+          likeIcon.src = "/like-bg.png";
 
-            userData.favorites[product.id] = true;
+          userData.favorites[product.id] = true;
 
-            api.patch(`users/${id}`, userData);
+          api.patch(`users/${id}`, userData);
 
-            localStorage.setItem(`liked-${product.id}`, 'true');
+          localStorage.setItem(`liked-${product.id}`, 'true');
         }
       });
-});
+  });
 
-window.addEventListener("load", () => {
+  window.addEventListener("load", () => {
     const isLiked = localStorage.getItem(`liked-${product.id}`);
 
     if (isLiked === 'true') {
-        likeIcon.src = "/like-bg.png";  
+      likeIcon.src = "/like-bg.png";
     } else {
-        likeIcon.src = "/like.svg";  
+      likeIcon.src = "/like.svg";
     }
-});
+  });
 
 
 
@@ -91,16 +91,11 @@ window.addEventListener("load", () => {
       .then(res => {
         const userData = res.data;
 
-        if (!userData.favorites) {
-          userData.favorites = {};
-        }
-
         userData.basket[product.id] = true;
 
         return api.patch(`users/${id}`, userData);
       })
       .then(res => {
-        console.log(res.data);
       })
       .catch(error => console.error(error));
   });
@@ -110,7 +105,7 @@ window.addEventListener("load", () => {
   cartIcon.alt = "Cart";
 
   productCard.onclick = () => {
-    window.location.href = "src/pages/cardProduct/";
+    window.location.href = "/src/pages/cardProduct/";
     localStorage.setItem("productId", product.id);
   };
   cartIconContainer.appendChild(cartIcon);

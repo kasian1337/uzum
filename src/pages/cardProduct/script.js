@@ -5,12 +5,13 @@ import { Header } from "/src/Components/header.js";
 
 Header();
 
-let id = localStorage.getItem("productId");
+let productId = localStorage.getItem("productId");
+let userId = localStorage.getItem("userId");
 const product = api.get("goods");
 let similarCards = document.querySelector(".similar-cards");
 Promise.all([product])
   .then(([product]) => {
-    let filterData = product.data.filter((item) => item.id === id);
+    let filterData = product.data.filter((item) => item.id === productId);
     let type = filterData[0].type;
     render(
       product.data.filter((item) => item.type === type).slice(0, 5),
@@ -67,3 +68,28 @@ increaseButton.addEventListener("click", () => {
   count++;
   updateDisplay();
 });
+const basket = document.querySelector(".basket");
+
+basket.addEventListener("click", () => {
+  api.get(`users/${userId}`)
+    .then((res) => {
+      const userData = res.data;
+      userData.basket[productId] = true;
+      console.log(userData);
+      
+      return api.patch(`users/${userId}`, userData);
+    })
+    .catch((error) => console.error(error));
+})
+const favorite = document.querySelector(".favorites");
+
+favorite.addEventListener("click", () => {
+  api.get(`users/${userId}`)
+    .then((res) => {
+      const userData = res.data;
+      userData.favorites[productId] = true;
+      
+      return api.patch(`users/${userId}`, userData);
+    })
+    .catch((error) => console.error(error));
+})

@@ -9,10 +9,15 @@ export default defineConfig({
 	},
 	build: {
 		outDir: "dist",
-		assetsDir: "assets", // Где хранятся сжатые файлы
-		sourcemap: false, // Отключаем карты кода (уменьшает размер)
+		assetsDir: "assets", 
+		sourcemap: false, 
 		rollupOptions: {
 			input: {
+				main: resolve(__dirname, "index.html"),
+				basketLIst: resolve(__dirname, "src/pages/basketLIst/index.html"),
+				cardProduct: resolve(__dirname, "src/pages/cardProduct/index.html"),
+				favoritesList: resolve(__dirname, "src/pages/favoritesList/index.html"),
+				technicalList: resolve(__dirname, "src/pages/technicalList/index.html"),
 			},
 		},
 	},

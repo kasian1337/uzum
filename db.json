@@ -950,11 +950,9 @@
       "name": "alex",
       "lastname": "history",
       "favorites": {
-        "4": true
+        "1": true
       },
-      "basket": {
-        "4": true
-      },
+      "basket": {},
       "patronymic": "",
       "birthdate": "1111-11-11",
       "email": "bazarovshaxriyor990@gmail.com",
